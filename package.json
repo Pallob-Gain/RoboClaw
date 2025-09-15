@@ -1,0 +1,20 @@
+{
+  "name": "roboclaw",
+  "version": "1.0.31",
+  "description": "",
+  "main": "./lib/index.js",
+  "scripts": {
+    "test": "node ./test/index.js",
+    "start": "node ./test/index.js",
+    "motor-timeout": "node ./test/motor-timeout.js",
+    "motor-timeout-smart": "node ./test/motor-timeout-smart.js"
+  },
+  "author": "Pallob K. Gain",
+  "license": "ISC",
+  "dependencies": {
+    "@serialport/parser-readline": "^12.0.0",
+    "express": "^4.18.2",
+    "serialport": "^12.0.0",
+    "socket.io": "^4.7.3"
+  }
+}
