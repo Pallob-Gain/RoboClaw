@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        .slider-options {
+            width: 400px;
+        }
+
+        .slider-list {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            writing-mode: vertical-lr;
+            width: 400px;
+        }
+
+        .slider-list option {
+            padding: 0;
+        }
+
+        .slider-options[type="range"] {
+            width: 400px;
+            margin: 0;
+        }
+
+        /* The switch - the box around the slider */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        /* Hide default HTML checkbox */
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        /* The slider */
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        input:checked+.slider {
+            background-color: #2196F3;
+        }
+
+        input:focus+.slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked+.slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+    </style>
+</head>
+
+<body>
+    <p>
+        <p>
+            Current: <label class="motor1-current"></label> A
+        </p>
+        <p>
+            Speed: <label class="motor1-speed"></label> QPPS
+        </p>
+        <p>
+            Encoder: <label class="motor1-encoder"></label> QP
+        </p>
+        <p>
+            Status: <label class="motor1-status"></label> 
+        </p>
+    </p><br />
+
+    <label for="motor-speed-value">Motor Speed:</label><br />
+    <input type="range" class="slider-options" id="motor-speed-value" name="motor-speed-value" list="motor-speeds"
+        min="-100" max="100" step="25" value="0" />
+
+    <datalist class="slider-list" id="motor-speeds">
+        <option value="-100" label="-100"></option>
+        <option value="-75" label="-75"></option>
+        <option value="-50" label="-50"></option>
+        <option value="-25" label="-25"></option>
+        <option value="0" label="0"></option>
+        <option value="25" label="25"></option>
+        <option value="50" label="50"></option>
+        <option value="75" label="75"></option>
+        <option value="100" label="100"></option>
+    </datalist>
+    <br />
+    <label >Motor State</label><br />
+
+    <!-- Rounded switch -->
+    <label class="switch">
+        <input type="checkbox" class="switch-toggle-state motor-state-controller" name="motor-state-controller">
+        <span class="slider round"></span>
+    </label>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+
+        // Now we are getting the image and 
+        // displaying it via img tag 
+        //const imageEle = document.getElementById('image'); 
+
+        // Connecting socket.io to localhost 
+        const socket = io();//io.connect('http://localhost:3000'); 
+
+        socket.on('motor-info-update',(info)=>{
+            console.log({info});
+            for(let [key,value] of Object.entries(info)){
+                $(`.motor1-${key}`).html(value);
+            }
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+
+            $('.slider-options').change(function () {
+                console.log( $(this).attr('name'), $(this).val());
+                socket.emit( $(this).attr('name'), $(this).val());
+            });
+
+            $('.switch-toggle-state').change(function () {
+                console.log( $(this).attr('name'), $(this).is(":checked"));
+                socket.emit( $(this).attr('name'), $(this).is(":checked"));
+            });
+
+        });
+    </script>
+</body>
+
+</html>
