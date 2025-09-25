@@ -9,6 +9,10 @@
     "motor-timeout": "node ./test/motor-timeout.js",
     "motor-timeout-smart": "node ./test/motor-timeout-smart.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pallob-Gain/RoboClaw.git"
+  },
   "author": "Pallob K. Gain",
   "license": "ISC",
   "dependencies": {
