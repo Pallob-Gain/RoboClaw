@@ -1,3 +1,8 @@
+# Ignore Windows desktop configuration files
+**/desktop.ini
+
+#git rm --cached -r **/desktop.ini
+
 # Logs
 logs
 *.log
